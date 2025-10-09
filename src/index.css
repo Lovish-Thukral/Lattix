@@ -147,3 +147,7 @@
   transform-origin: center;
   animation: typing-center 4s steps(30, end) both;
 }
+
+html {
+  scroll-behavior: smooth;
+}

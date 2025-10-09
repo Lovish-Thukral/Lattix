@@ -1,38 +1,52 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState, useRef } from "react";
-import webDevImg from "../assets/webDev.gif";
+import webDevImg from "../assets/services.gif";
 import brandingImg from "../assets/branding.gif";
 import uxuiImg from "../assets/uxui.gif";
 import stationaryImg from "../assets/stationary.gif";
 import seoImg from "../assets/seo.gif";
 import giftsImg from "../assets/gifts.gif";
-import { servicesVersion } from "typescript";
+import landing from "../assets/landing.gif";
+import appdev from "../assets/appdev.gif"
 
 function Container({ service, index }) {
   const [active, setActive] = useState(false);
-  const x = useMotionValue(200);
-  const y = useMotionValue(200);
+  const containerRef = useRef(null); // Add ref for the container
+  const x = useMotionValue(100);
+  const y = useMotionValue(100);
   const rotateX = useTransform(y, [0, 200], [-10, 10]);
   const rotateY = useTransform(x, [0, 200], [10, -10]);
 
+  const handleMouseMove = (e) => {
+    if (containerRef.current) {
+      // Get container's position relative to viewport
+      const rect = containerRef.current.getBoundingClientRect();
+
+      // Calculate mouse position relative to container
+      const relativeX = e.clientX - rect.left;
+      const relativeY = e.clientY - rect.top;
+
+      x.set(relativeX);
+      y.set(relativeY);
+    }
+  };
+
   return (
     <motion.div
+      ref={containerRef}
       initial={{ y: -20 }}
       whileInView={{ y: 0 }}
       transition={{ duration: 1.5 }}
       className={`${
-        service.Highlight ? "col-span-3" : "col-span-2"
-      } relative bg-[rgb(30,32,36)] rounded-3xl items-center justify-center text-center shadow-lg overflow-visible p-6`}
+        service.Highlight ? "md:col-span-3" : "md:col-span-2"
+      } relative bg-[rgb(30,32,36)] rounded-3xl items-center justify-center text-center shadow-lg overflow-visible p-6 w-full`}
     >
       <motion.div
         onMouseEnter={() => setActive(true)}
         onMouseLeave={() => setActive(false)}
         whileHover={{ scale: 1.08 }}
         transition={{ type: "spring", stiffness: 300 }}
-        onMouseMove={(e) => {
-          x.set(e.clientX);
-          y.set(e.clientY);
-        }}
+        onMouseMove={handleMouseMove}
         className="flex-1 justify-between"
       >
         <div
@@ -44,16 +58,18 @@ function Container({ service, index }) {
         <h3 className="text-white text-xl font-bold ">{service.title}</h3>
         {service.desc && <p className="text-gray-400 mt-2">{service.desc}</p>}
       </motion.div>
+
       {active && (
         <motion.img
           src={service.img}
           alt={service.title}
-          className="w-52 h-52 object-cover rounded-2xl absolute pointer-events-none top-0 left-0 z-50"
+          className="w-80 h-70 object-cover rounded-2xl absolute pointer-events-none z-50"
           style={{
-            x: x - 10,
-            y: y - 10,
+            left: x,
+            top: y,
             rotateX: rotateX,
             rotateY: rotateY,
+            transform: "translate(-50%, -50%)", // Center the image on cursor
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -70,7 +86,7 @@ function Services() {
     {
       title: "Professional Landing Page Design",
       desc: "Custom landing pages optimized for conversions and user engagement.",
-      img: giftsImg,
+      img: landing,
       color: "from-pink-300 to-purple-400",
       Highlight: false,
       alt: "Custom landing page design services",
@@ -113,12 +129,12 @@ function Services() {
     {
       title: "Mobile App Development",
       desc: "Custom mobile app development for iOS and Android platforms.",
-      img: webDevImg,
+      img: appdev,
       Highlight: false,
       alt: "Professional app development services",
     },
     {
-      title: "Personalized Customized Gifts",
+      title: "Personalized Gifting Items",
       desc: "Unique customized gifts for personal and corporate needs.",
       img: giftsImg,
       Highlight: false,
@@ -130,7 +146,7 @@ function Services() {
     <section className="h-max w-[90%] mx-auto my-16 bg-[rgb(25,26,26)] px-[7%] py-12 rounded-[3rem] relative z-10">
       {/* Heading */}
       <motion.h1
-        className="text-5xl bebas-neue-regular tracking-wide absolute top-10 left-24 text-white"
+        className="text-5xl bebas-neue-regular tracking-wide absolute top-10 sm:left-24 text-white"
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
