@@ -2,7 +2,8 @@ import HeroDiv from "../components/HeroDiv";
 import { motion } from "framer-motion";
 import img from "../assets/thumbsup.png";
 import { useState } from "react";
-import { FlameKindling } from "lucide-react";
+import ApproachSection from "../components/ApproachSection";
+import ContactUs from "../components/ContactUs"
 
 const About = () => {
   const [ishovered, hovered] = useState(false);
@@ -36,7 +37,7 @@ const About = () => {
   return (
     <div>
       <HeroDiv>
-        <div className="scale-85 flex flex-col justify-center items-center text-center my-[20vh]">
+        <div className="scale-85 flex flex-col justify-center items-center text-center my-[25vh]" id="NavHero">
           <h1 className="text-[1.7rem] md:text-6xl font-bold text-white leading-tight mb-7 animation-duration-initial animate-typing">
             Ignite Your Brand’s Potential,
             <br />
@@ -62,27 +63,26 @@ const About = () => {
         </motion.h3>
 
         <motion.h1
-          className="text-3xl md:text-4xl col-span-1 sm:col-span-5 px-16"
+          className="text-3xl md:text-4xl col-span-1 sm:col-span-5 px-16 my-9"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          whileHover={{}}
+          onMouseEnter={() => hovered(true)}
+          onMouseLeave={() => hovered(false)}
+
         >
           To create a world made of thoughtful designs and experiences.
         </motion.h1>
         <motion.img
           src={img}
-          className={`h-[150px] w-[120px] bg-gradient-to-t from-[rgba(3,109,77,0.41)] ${
-            ishovered ? "hidden" : "flex"
-          }`}
+          className={`h-[150px] w-[120px] bg-gradient-to-t from-[rgba(3,109,77,0.41)] ${ishovered ? "flex" : "hidden"}`}
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         />
       </section>
-
-      <div className="h-screen w-[90%] bg-[rgb(25,26,26)] flex-1 justify-center items-center px-16 pt-[10vh] bg-cover bg-no-repeat bg-center mx-auto my-20 rounded-[3rem]">
+      <div className="h-fit w-[90%] bg-[rgb(25,26,26)] flex-1 justify-center items-center px-16 py-[10vh] bg-cover bg-no-repeat bg-center mx-auto my-14 rounded-[3rem]">
         {/* Section Title */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -119,6 +119,8 @@ const About = () => {
           ))}
         </div>
       </div>
+      <ApproachSection />
+      <ContactUs />
     </div>
   );
 };

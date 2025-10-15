@@ -1,12 +1,12 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState, useRef } from "react";
-import webDevImg from "../assets/services.gif";
+import webDevImg from "../assets/services.avif";
 import brandingImg from "../assets/branding.gif";
-import uxuiImg from "../assets/uxui.gif";
+import uxuiImg from "../assets/uxui.avif";
 import stationaryImg from "../assets/stationary.gif";
 import seoImg from "../assets/seo.gif";
 import giftsImg from "../assets/gifts.gif";
-import landing from "../assets/landing.gif";
+import landing from "../assets/landing.avif";
 import appdev from "../assets/appdev.gif"
 
 function Container({ service, index }) {

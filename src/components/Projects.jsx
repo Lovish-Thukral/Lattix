@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import bliss from "../assets/bliss.png";
-import surescripts from "../assets/surescripts.png";
+import bliss from "../assets/bliss.jpg";
+import surescripts from "../assets/surescripts.jpg";
 import TiltCard from "./ui/TiltCard";
 
 export default function Projects() {

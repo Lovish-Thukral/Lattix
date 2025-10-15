@@ -1,9 +1,9 @@
 // App.jsx
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Nav from "./components/Nav";
-import HomePage from "./Routes/HomePage";
-import About from "./Routes/about";
-import Services from "./Routes/ServicesPage";
+import Homepage from './Routes/HomePage'
+import About from "./Routes/About";
+import ServicesPage from "./Routes/ServicesPage"
 
 // Layout that wraps pages and keeps Nav inside router context
 function Layout() {
@@ -23,9 +23,9 @@ function App() {
       path: "/",
       element: <Layout />, // root layout
       children: [
-        { index: true, element: <HomePage /> }, // path: "/"
+        { index: true, element: <Homepage /> }, // path: "/"
         { path: "about", element: <About /> }, // path: "/about"
-        { path: "services", element: <Services /> }, // path: "/services"
+        { path: "services", element: <ServicesPage /> }, // path: "/services"
       ],
     },
   ]);

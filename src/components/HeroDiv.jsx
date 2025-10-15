@@ -19,7 +19,7 @@ const HeroDiv = ({ children }) => {
         {children}
       </motion.div>
     </div>
-  );
+  );  
 };
 
 export default HeroDiv;

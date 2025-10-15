@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import logo from "../assets/logo.svg";
-import monkeycall from "../assets/monkeycall.gif";
+import monkeycall from "../assets/monkeycall.webp";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -195,14 +195,10 @@ export default function Nav() {
           <NavigationMenuList className="flex space-x-10">
             {navItems.map((item) => (
               <NavigationMenuItem key={item.title}>
-                <NavigationMenuLink asChild>
+                <NavigationMenuLink asChild className='text-lg font-serif px-4 py-2 transition-all duration-700'>
                   <NavLink
                     to={item.href}
-                    className={({ isActive }) =>
-                      `text-lg font-serif px-4 py-2 transition-all duration-700 ${
-                        isActive ? "text-pink-500" : "text-white"
-                      }`
-                    }
+                    
                   >
                     {item.title}
                   </NavLink>
