@@ -1,38 +1,39 @@
 // ApproachSection.jsx
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Search, NotebookPen, Wallpaper, Figma, BugIcon } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Search, NotebookPen, Wallpaper, Figma, BugIcon } from "lucide-react";
 
 const approaches = [
   {
-    title: 'Deep Dive',
-    description: 'In-depth exploration of business and the product.',
-    number: '01',
-    icon: <Search className='absolute right-4 bottom-4 text-gray-500' />
+    title: "Deep Dive",
+    description: "In-depth exploration of business and the product.",
+    number: "01",
+    icon: <Search className="absolute right-4 bottom-4 text-gray-500" />,
   },
   {
-    title: 'Pre-Production',
-    description: 'Identification of the core problems, pain points, and art direction.',
-    number: '02',
-    icon: <NotebookPen className='absolute right-4 bottom-4 text-gray-500' />
+    title: "Pre-Production",
+    description:
+      "Identification of the core problems, pain points, and art direction.",
+    number: "02",
+    icon: <NotebookPen className="absolute right-4 bottom-4 text-gray-500" />,
   },
   {
-    title: 'Design Proposition',
-    description: 'Presenting concept solutions.',
-    number: '03',
-    icon: <Wallpaper className='absolute right-4 bottom-4 text-gray-500' />
+    title: "Design Proposition",
+    description: "Presenting concept solutions.",
+    number: "03",
+    icon: <Wallpaper className="absolute right-4 bottom-4 text-gray-500" />,
   },
   {
-    title: 'Design Development',
-    description: 'Further development of the concept to final product.',
-    number: '04',
-     icon: <Figma className='absolute right-4 bottom-4 text-gray-500' />
+    title: "Design Development",
+    description: "Further development of the concept to final product.",
+    number: "04",
+    icon: <Figma className="absolute right-4 bottom-4 text-gray-500" />,
   },
   {
-    title: 'Delivery and Testing',
-    description: 'Design finalization, testing, delivery and handover.',
-    number: '05',
-    icon: <BugIcon className='absolute right-4 bottom-4 text-gray-500' />
+    title: "Delivery and Testing",
+    description: "Design finalization, testing, delivery and handover.",
+    number: "05",
+    icon: <BugIcon className="absolute right-4 bottom-4 text-gray-500" />,
   },
 ];
 
@@ -45,7 +46,7 @@ const cardVariant = {
     transition: {
       delay: i * 0.2,
       duration: 0.6,
-      type: 'spring',
+      type: "spring",
       stiffness: 100,
     },
   }),
@@ -53,10 +54,10 @@ const cardVariant = {
 
 export default function ApproachSection() {
   return (
-    <div className='flex-1'>
-      <section className="h-max w-[90%] mx-auto px-10 my-16 grid grid-cols-3 sm:grid-cols-8 gap-6">
+    <div className="flex-1">
+      <section className="w-[90%] mx-auto md:px-10 px-2 md:my-16 my-5 text-white grid sm:grid-cols-8 gap-6 items-center">
         <motion.h3
-          className="text-xl font-bold col-span-1 sm:col-span-2 "
+          className="text-xl font-bold col-span-8 sm:col-span-2"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -66,21 +67,17 @@ export default function ApproachSection() {
         </motion.h3>
 
         <motion.h1
-          className="text-3xl md:text-4xl col-span-1 sm:col-span-5 px-16 my-9"
+          className="text-3xl md:text-4xl font-semibold col-span-8 sm:col-span-5 md:px-8 leading-snug"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          onMouseEnter={() => hovered(true)}
-          onMouseLeave={() => hovered(false)}
-
         >
           First step to solving a problem is recognizing there is one.
         </motion.h1>
       </section>
 
-
-      <div className="my-12 flex flex-wrap justify-center gap-6">
+      <div className="my-12 w-full flex flex-wrap justify-center gap-6 ">
         {approaches.map((item, index) => (
           <motion.div
             key={index}
@@ -89,7 +86,7 @@ export default function ApproachSection() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             variants={cardVariant}
-            className="bg-[rgb(25,26,26)] p-6 rounded-xl w-64 h-60 relative shadow-lg hover:shadow-xl transition-shadow duration-300"
+            className="bg-[rgb(25,26,26)] p-6 rounded-xl w-64 h-60 not-sm:w-[90%] relative shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
             <h3 className="text-white font-medium text-lg mb-4">
               • {item.title}

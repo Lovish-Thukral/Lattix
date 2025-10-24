@@ -10,7 +10,9 @@ const ContactUs = () => {
     project: "",
   });
 
-  const [selectedInterests, setSelectedInterests] = useState([]);
+  // single-select states
+  const [selectedInterest, setSelectedInterest] = useState("");
+  const [selectedCombo, setSelectedCombo] = useState("");
   const [selectedBudget, setSelectedBudget] = useState("");
   const [freeButtonPosition, setFreeButtonPosition] = useState({ x: 0, y: 0 });
   const [isRunning, setIsRunning] = useState(false);
@@ -22,21 +24,24 @@ const ContactUs = () => {
     "UI/UX",
     "SEO",
     "Web Development",
-    "Mobile Developments",
+    "Mobile Development",
     "Branding",
-    "Stationary",
+    "Stationery",
     "Gifting",
   ];
 
-  // "Free" option is back, along with the INR budget ranges
-  const budgetOptions = ["Free", "< ₹10k    ", "₹10k - ₹25k", "₹30k >"];
+  const combos = ["Ignite", "Thrive", "Elevate", "Scale", "Dominate"];
 
-  const handleInterestToggle = (interest) => {
-    setSelectedInterests((prev) =>
-      prev.includes(interest)
-        ? prev.filter((item) => item !== interest)
-        : [...prev, interest]
-    );
+  // "Free" option remains non-selectable and will run away on hover
+  const budgetOptions = ["Free", "< ₹10k", "₹10k - ₹25k", "₹30k >"];
+
+  const handleInterestSelect = (interest) => {
+    // single-select: click same to unselect
+    setSelectedInterest((prev) => (prev === interest ? "" : interest));
+  };
+
+  const handleComboSelect = (combo) => {
+    setSelectedCombo((prev) => (prev === combo ? "" : combo));
   };
 
   const handleInputChange = (e) => {
@@ -48,7 +53,7 @@ const ContactUs = () => {
   };
 
   const handleBudgetSelect = (budget) => {
-    // If "Free" is clicked, trigger the runaway animation instead of selecting it
+    // Free is intentionally non-selectable — hovering/clicking it triggers the runaway animation
     if (budget === "Free") {
       runAwayFree();
       return;
@@ -59,29 +64,34 @@ const ContactUs = () => {
   const runAwayFree = () => {
     if (!containerRef.current || !freeButtonRef.current) return;
 
-    setIsRunning(true);
     const containerRect = containerRef.current.getBoundingClientRect();
     const buttonRect = freeButtonRef.current.getBoundingClientRect();
 
-    const newX = Math.random() * (containerRect.width - buttonRect.width);
-    const newY = Math.random() * (containerRect.height - buttonRect.height);
+    // Compute safe random position inside container
+    const maxX = Math.max(0, containerRect.width - buttonRect.width);
+    const maxY = Math.max(0, containerRect.height - buttonRect.height);
+
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
 
     setFreeButtonPosition({ x: newX, y: newY });
+    setIsRunning(true);
 
-    // Reset the state after the animation and message have been shown
+    // show running state for a bit
     setTimeout(() => {
       setIsRunning(false);
-    }, 5000);
+    }, 1500);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({
       ...formData,
-      interests: selectedInterests,
+      interest: selectedInterest,
+      combo: selectedCombo,
       budget: selectedBudget,
     });
-    // Add submission logic here
+    // implement submission logic (API call etc.) here
   };
 
   return (
@@ -101,7 +111,7 @@ const ContactUs = () => {
         className="h-max w-[95%] md:w-[90%] mx-auto my-7 bg-[rgb(25,26,26)] px-6 sm:px-8 md:px-[9%] py-12 sm:py-16 rounded-[3rem] relative"
       >
         <form onSubmit={handleSubmit} className="space-y-10">
-          {/* Form fields (Name, Company, Email, Phone) */}
+          {/* Name / Company */}
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10"
             initial={{ opacity: 0, y: 20 }}
@@ -110,9 +120,7 @@ const ContactUs = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div>
-              <label className="block text-white text-base font-medium mb-3">
-                Name
-              </label>
+              <label className="block text-white text-base font-medium mb-3">Name</label>
               <input
                 type="text"
                 name="name"
@@ -123,9 +131,7 @@ const ContactUs = () => {
               />
             </div>
             <div>
-              <label className="block text-white text-base font-medium mb-3">
-                Company
-              </label>
+              <label className="block text-white text-base font-medium mb-3">Company</label>
               <input
                 type="text"
                 name="company"
@@ -136,6 +142,8 @@ const ContactUs = () => {
               />
             </div>
           </motion.div>
+
+          {/* Email / Phone */}
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10"
             initial={{ opacity: 0, y: 20 }}
@@ -144,9 +152,7 @@ const ContactUs = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <div>
-              <label className="block text-white text-base font-medium mb-3">
-                Your Email
-              </label>
+              <label className="block text-white text-base font-medium mb-3">Your Email</label>
               <input
                 type="email"
                 name="email"
@@ -157,9 +163,7 @@ const ContactUs = () => {
               />
             </div>
             <div>
-              <label className="block text-white text-base font-medium mb-3">
-                Your Phone
-              </label>
+              <label className="block text-white text-base font-medium mb-3">Your Phone</label>
               <input
                 type="tel"
                 name="phone"
@@ -171,24 +175,22 @@ const ContactUs = () => {
             </div>
           </motion.div>
 
-          {/* Interests Section */}
+          {/* Interests (single-select) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <label className="block text-white text-base font-medium mb-4">
-              I'm interested in...
-            </label>
+            <label className="block text-white text-base font-medium mb-4">I'm interested in...</label>
             <div className="flex flex-wrap gap-3">
               {interests.map((interest, index) => (
                 <motion.button
                   key={interest}
                   type="button"
-                  onClick={() => handleInterestToggle(interest)}
+                  onClick={() => handleInterestSelect(interest)}
                   className={`px-6 py-3 rounded-full border text-sm sm:text-base transition-all duration-300 ${
-                    selectedInterests.includes(interest)
+                    selectedInterest === interest
                       ? "bg-white text-black border-white"
                       : "bg-transparent text-white border-gray-600 hover:border-white"
                   }`}
@@ -205,19 +207,16 @@ const ContactUs = () => {
             </div>
           </motion.div>
 
-          {/* Budget Section */}
+          {/* Budget (Free is non-selectable and runs away on hover) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
-            <label className="block text-white text-base font-medium mb-4">
-              Project Budget (INR)
-            </label>
+            <label className="block text-white text-base font-medium mb-4">Project Budget (INR)</label>
             <div className="flex flex-wrap items-center gap-3 relative min-h-[50px]">
               {budgetOptions.map((budget, index) => {
-                // Conditional rendering for the "Free" button
                 if (budget === "Free") {
                   return (
                     <motion.button
@@ -226,12 +225,12 @@ const ContactUs = () => {
                       type="button"
                       onMouseEnter={runAwayFree}
                       onClick={runAwayFree}
-                      className=" not-sm:hidden px-8 py-3 rounded-full border bg-transparent text-white border-gray-600 hover:border-white transition-colors"
+                      className="not-sm:hidden px-8 py-3 rounded-full border bg-transparent text-white border-gray-600 hover:border-white transition-colors"
                       initial={{ x: 0, y: 0 }}
                       animate={{
                         x: isRunning ? freeButtonPosition.x : 0,
                         y: isRunning ? freeButtonPosition.y : 0,
-                        rotate: isRunning ? [0, -10, 10, -10, 0] : 0,
+                        rotate: isRunning ? [0, -8, 8, -8, 0] : 0,
                       }}
                       transition={{
                         type: "spring",
@@ -245,15 +244,16 @@ const ContactUs = () => {
                       }}
                       style={{
                         position: isRunning ? "absolute" : "relative",
-                        zIndex: 10,
+                        zIndex: 20,
+                        cursor: "not-allowed", // indicates non-selectable
                       }}
+                      aria-disabled={true}
                     >
                       {budget} 🏃‍♂️
                     </motion.button>
                   );
                 }
 
-                // Render normal budget buttons
                 return (
                   <motion.button
                     key={budget}
@@ -276,6 +276,7 @@ const ContactUs = () => {
                 );
               })}
             </div>
+
             <AnimatePresence>
               {isRunning && (
                 <motion.div
@@ -291,16 +292,46 @@ const ContactUs = () => {
             </AnimatePresence>
           </motion.div>
 
-          {/* Project Description & Submit Button */}
+          {/* Branding Combos (single-select) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <label className="block text-white text-base font-medium mb-3">
-              Tell us about your project
-            </label>
+            <label className="block text-white text-base font-medium mb-4">Have you checked out our branding combos?</label>
+            <div className="flex flex-wrap gap-3">
+              {combos.map((combo, index) => (
+                <motion.button
+                  key={combo}
+                  type="button"
+                  onClick={() => handleComboSelect(combo)}
+                  className={`px-6 py-3 rounded-full border text-sm sm:text-base transition-all duration-300 ${
+                    selectedCombo === combo
+                      ? "bg-white text-black border-white"
+                      : "bg-transparent text-white border-gray-600 hover:border-white"
+                  }`}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.05 * index }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {combo}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Project Description & Submit */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          >
+            <label className="block text-white text-base font-medium mb-3">Tell us about your project</label>
             <textarea
               name="project"
               value={formData.project}
@@ -310,22 +341,15 @@ const ContactUs = () => {
               placeholder="Describe your project in detail..."
             />
           </motion.div>
+
           <motion.div
             className="flex justify-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
           >
-            <div className="sm:flex flex-1 justify-between w-full">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-4 rounded-xl not-md:w-full bg-pink-500 text-white font-semibold shadow-md hover:bg-pink-600 transition my-2"
-              >
-                Before you proceed… are you allergic to deals?
-              </motion.button>
-
+            <div className="sm:flex flex-1 justify-end w-full">
               <motion.button
                 type="submit"
                 className="bg-white text-black my-2 px-12 py-4 not-sm:w-full rounded-full font-medium text-lg hover:bg-gray-200 hover:text-black transition-colors"

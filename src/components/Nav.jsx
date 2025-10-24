@@ -9,16 +9,18 @@ import {
 } from "./ui/navigation-menu";
 import { motion } from "framer-motion";
 import { NavLink, Link } from "react-router-dom";
-import { Instagram } from "lucide-react";
+import { Instagram, PanelBottom, Home, User, Workflow } from "lucide-react";
 
 const navItems = [
-  { title: "Home", href: "/" },
-  { title: "About", href: "/about" },
-  { title: "Services", href: "/services" },
+  { title: "Home", href: "/", icon: <Home size={24} /> },
+  { title: "About", href: "/about", icon: <User size={24} /> },
+  { title: "Services", href: "/services", icon: <Workflow size={24} /> },
 ];
+
 
 export default function Nav() {
   const [showMonkey, setShowMonkey] = useState(false);
+  const [mobMenu, ShowmobMenu] = useState(false)
   const timeoutRef = useRef(null);
 
   // Form state (so submit doesn't reload)
@@ -65,7 +67,36 @@ export default function Nav() {
   };
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-[rgba(25,26,26,0.67)] text-white sm:px-10 px-2 sm:py-3 py-1">
+    <header className="fixed top-0 z-50 w-full bg-[rgba(25,26,26,0.67)] text-white sm:px-10 px-2 sm:py-3 py-1"
+    onClick={(e) => {
+      if (!mobMenu) return
+      const clickY = e.clientY;
+      const threshold = window.innerHeight * 0.72; // 28vh from bottom
+      if (clickY < threshold) {
+        e.stopPropagation();
+        ShowmobMenu(false);
+      }
+    }}>
+      {mobMenu  && (
+        <motion.div
+        className="fixed bottom-0 flex w-[95%] h-22 justify-between text-white font-serif px-10 bg-[rgba(25,26,26,0.93)] mx-auto "
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {navItems.map((item) => (
+          <NavLink
+            key={item.title}
+            to={item.href}
+            className="flex text-lg text-white justify-center flex-col font-medium px-3 py-5 hover:text-gray-300 transition"
+          >
+            <div className="mx-auto m-1">{item.icon}</div>
+            <p>{item.title}</p>
+          </NavLink>
+        ))}
+      </motion.div>
+      )}
+
       {/* Monkey Call Popup (responsive widths + proper top spacing) */}
       {showMonkey && (
         <motion.div
@@ -195,43 +226,47 @@ export default function Nav() {
           <NavigationMenuList className="flex space-x-10">
             {navItems.map((item) => (
               <NavigationMenuItem key={item.title}>
-                <NavigationMenuLink asChild className='text-lg font-serif px-4 py-2 transition-all duration-700'>
-                  <NavLink
-                    to={item.href}
-                    
-                  >
-                    {item.title}
-                  </NavLink>
+                <NavigationMenuLink
+                  asChild
+                  className="text-lg font-serif px-4 py-2 transition-all duration-700"
+                >
+                  <NavLink to={item.href}>{item.title}</NavLink>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
         </NavigationMenu>
 
-        <button
-          className="group bg-[#22282d] text-white font-bold sm:py-3 py-2 sm:px-6 px-3 rounded-4xl flex items-center space-x-2 hover:bg-white hover:text-black transition-all duration-500"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onClick={handleClick}
-        >
-          <span className="sm:block hidden">Let's Talk</span>
-
-          <svg
-            className="w-6 h-6 transition-all duration-500 group-hover:rotate-180 group-hover:text-black"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            viewBox="0 0 24 24"
+        <div className="flex gap-4 flex-row-reverse">
+          <button className="md:hidden bg-[#22282d] text-white font-bold py-4 px-4 rounded-4xl"
+          onClick={() => (ShowmobMenu(p => !p))}>
+            <PanelBottom size={20} />
+          </button>
+          <button
+            className="group bg-[#22282d] text-white font-bold sm:py-3 py-2 sm:px-6 px-3 rounded-4xl flex items-center space-x-2 hover:bg-white hover:text-black transition-all duration-500"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
           >
-            <path
-              fillRule="evenodd"
-              d="M13.729 5.575c1.304-1.074 3.27-.146 3.27 1.544v9.762c0 1.69-1.966 2.618-3.27 1.544l-5.927-4.881a2 2 0 0 1 0-3.088l5.927-4.88Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
+            <span className="sm:block hidden">Let's Talk</span>
+
+            <svg
+              className="w-6 h-6 transition-all duration-500 group-hover:rotate-180 group-hover:text-black"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fillRule="evenodd"
+                d="M13.729 5.575c1.304-1.074 3.27-.146 3.27 1.544v9.762c0 1.69-1.966 2.618-3.27 1.544l-5.927-4.881a2 2 0 0 1 0-3.088l5.927-4.88Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
   );

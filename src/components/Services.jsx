@@ -63,7 +63,7 @@ function Container({ service, index }) {
         <motion.img
           src={service.img}
           alt={service.title}
-          className="w-80 h-70 object-cover rounded-2xl absolute pointer-events-none z-50"
+          className="md:w-80 md:h-70 w-32 h-52 object-cover rounded-2xl absolute pointer-events-none z-50"
           style={{
             left: x,
             top: y,
@@ -143,7 +143,7 @@ function Services() {
   ];
 
   return (
-    <section className="h-max w-[90%] mx-auto my-16 bg-[rgb(25,26,26)] px-[7%] py-12 rounded-[3rem] relative z-10">
+    <section className="h-max w-[90%] mx-auto mt-16 mb-7 bg-[rgb(25,26,26)] px-[7%] py-12 rounded-[3rem] relative z-10">
       {/* Heading */}
       <motion.h1
         className="text-5xl bebas-neue-regular tracking-wide absolute top-10 sm:left-24 text-white"
@@ -159,6 +159,8 @@ function Services() {
           <Container service={service} index={i + 1} />
         ))}
       </div>
+
+      
     </section>
   );
 }
