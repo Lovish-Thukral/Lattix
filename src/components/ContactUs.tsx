@@ -1,8 +1,22 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useRef} from "react";
+import React from "react";
 
-const ContactUs = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  project: string;
+}
+
+interface Position {
+  x: number;
+  y: number;
+}
+
+const ContactUs: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     company: "",
     email: "",
@@ -11,15 +25,15 @@ const ContactUs = () => {
   });
 
   // single-select states
-  const [selectedInterest, setSelectedInterest] = useState("");
-  const [selectedCombo, setSelectedCombo] = useState("");
-  const [selectedBudget, setSelectedBudget] = useState("");
-  const [freeButtonPosition, setFreeButtonPosition] = useState({ x: 0, y: 0 });
-  const [isRunning, setIsRunning] = useState(false);
-  const containerRef = useRef(null);
-  const freeButtonRef = useRef(null);
+  const [selectedInterest, setSelectedInterest] = useState<string>("");
+  const [selectedCombo, setSelectedCombo] = useState<string>("");
+  const [selectedBudget, setSelectedBudget] = useState<string>("");
+  const [freeButtonPosition, setFreeButtonPosition] = useState<Position>({ x: 0, y: 0 });
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const freeButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const interests = [
+  const interests: string[] = [
     "Landing Page",
     "UI/UX",
     "SEO",
@@ -30,21 +44,21 @@ const ContactUs = () => {
     "Gifting",
   ];
 
-  const combos = ["Ignite", "Thrive", "Elevate", "Scale", "Dominate"];
+  const combos: string[] = ["Ignite", "Thrive", "Elevate", "Scale", "Dominate"];
 
   // "Free" option remains non-selectable and will run away on hover
-  const budgetOptions = ["Free", "< ₹10k", "₹10k - ₹25k", "₹30k >"];
+  const budgetOptions: string[] = ["Free", "< ₹10k", "₹10k - ₹25k", "₹30k >"];
 
-  const handleInterestSelect = (interest) => {
+  const handleInterestSelect = (interest: string): void => {
     // single-select: click same to unselect
     setSelectedInterest((prev) => (prev === interest ? "" : interest));
   };
 
-  const handleComboSelect = (combo) => {
+  const handleComboSelect = (combo: string): void => {
     setSelectedCombo((prev) => (prev === combo ? "" : combo));
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -52,7 +66,7 @@ const ContactUs = () => {
     }));
   };
 
-  const handleBudgetSelect = (budget) => {
+  const handleBudgetSelect = (budget: string): void => {
     // Free is intentionally non-selectable — hovering/clicking it triggers the runaway animation
     if (budget === "Free") {
       runAwayFree();
@@ -61,7 +75,7 @@ const ContactUs = () => {
     setSelectedBudget(budget);
   };
 
-  const runAwayFree = () => {
+  const runAwayFree = (): void => {
     if (!containerRef.current || !freeButtonRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
@@ -83,7 +97,7 @@ const ContactUs = () => {
     }, 1500);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log({
       ...formData,
@@ -120,7 +134,9 @@ const ContactUs = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div>
-              <label className="block text-white text-base font-medium mb-3">Name</label>
+              <label className="block text-white text-base font-medium mb-3">
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -131,7 +147,9 @@ const ContactUs = () => {
               />
             </div>
             <div>
-              <label className="block text-white text-base font-medium mb-3">Company</label>
+              <label className="block text-white text-base font-medium mb-3">
+                Company
+              </label>
               <input
                 type="text"
                 name="company"
@@ -152,7 +170,9 @@ const ContactUs = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <div>
-              <label className="block text-white text-base font-medium mb-3">Your Email</label>
+              <label className="block text-white text-base font-medium mb-3">
+                Your Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -163,7 +183,9 @@ const ContactUs = () => {
               />
             </div>
             <div>
-              <label className="block text-white text-base font-medium mb-3">Your Phone</label>
+              <label className="block text-white text-base font-medium mb-3">
+                Your Phone
+              </label>
               <input
                 type="tel"
                 name="phone"
@@ -182,7 +204,9 @@ const ContactUs = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <label className="block text-white text-base font-medium mb-4">I'm interested in...</label>
+            <label className="block text-white text-base font-medium mb-4">
+              I'm interested in...
+            </label>
             <div className="flex flex-wrap gap-3">
               {interests.map((interest, index) => (
                 <motion.button
@@ -214,7 +238,9 @@ const ContactUs = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
-            <label className="block text-white text-base font-medium mb-4">Project Budget (INR)</label>
+            <label className="block text-white text-base font-medium mb-4">
+              Project Budget (INR)
+            </label>
             <div className="flex flex-wrap items-center gap-3 relative min-h-[50px]">
               {budgetOptions.map((budget, index) => {
                 if (budget === "Free") {
@@ -299,7 +325,9 @@ const ContactUs = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <label className="block text-white text-base font-medium mb-4">Have you checked out our branding combos?</label>
+            <label className="block text-white text-base font-medium mb-4">
+              Have you checked out our branding combos?
+            </label>
             <div className="flex flex-wrap gap-3">
               {combos.map((combo, index) => (
                 <motion.button
@@ -331,7 +359,9 @@ const ContactUs = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
-            <label className="block text-white text-base font-medium mb-3">Tell us about your project</label>
+            <label className="block text-white text-base font-medium mb-3">
+              Tell us about your project
+            </label>
             <textarea
               name="project"
               value={formData.project}

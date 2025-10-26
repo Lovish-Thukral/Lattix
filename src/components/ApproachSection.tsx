@@ -1,9 +1,15 @@
-// ApproachSection.jsx
-import React from "react";
 import { motion } from "framer-motion";
+import type { Variants, Transition } from "framer-motion";
 import { Search, NotebookPen, Wallpaper, Figma, BugIcon } from "lucide-react";
 
-const approaches = [
+interface Approach {
+  title: string;
+  description: string;
+  number: string;
+  icon: React.ReactNode;
+}
+
+const approaches: Approach[] = [
   {
     title: "Deep Dive",
     description: "In-depth exploration of business and the product.",
@@ -37,9 +43,9 @@ const approaches = [
   },
 ];
 
-const cardVariant = {
+const cardVariant: Variants = {
   hidden: { opacity: 0, y: 80, rotate: -10 },
-  visible: (i) => ({
+  visible: (i: number) => ({
     opacity: 1,
     y: 0,
     rotate: 0,
@@ -48,7 +54,7 @@ const cardVariant = {
       duration: 0.6,
       type: "spring",
       stiffness: 100,
-    },
+    } as Transition,
   }),
 };
 

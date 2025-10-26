@@ -1,19 +1,24 @@
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, MotionValue } from "framer-motion";
+import React from "react";
 
-function TiltCard({ object }) {
+interface TiltCardProps {
+  object: React.ReactNode;
+}
+
+const TiltCard: React.FC<TiltCardProps> = ({ object }) => {
   // Motion values
-  const x = useMotionValue(100);
-  const y = useMotionValue(100);
+  const x: MotionValue<number> = useMotionValue(100);
+  const y: MotionValue<number> = useMotionValue(100);
 
   const rotateX = useTransform(y, [0, 400], [5, -5]);
   const rotateY = useTransform(x, [0, 400], [-5, 5]);
 
   // Mouse move handler
-  function handleMouse(event) {
+  const handleMouse = (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     x.set(event.clientX - rect.left);
     y.set(event.clientY - rect.top);
-  }
+  };
 
   return (
     <motion.div
@@ -23,7 +28,7 @@ function TiltCard({ object }) {
         borderRadius: 30,
         perspective: 800,
         marginTop: 30,
-        marginBottom: 30
+        marginBottom: 30,
       }}
       onMouseMove={handleMouse}
     >
@@ -39,6 +44,6 @@ function TiltCard({ object }) {
       </motion.div>
     </motion.div>
   );
-}
+};
 
 export default TiltCard;

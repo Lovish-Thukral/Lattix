@@ -1,13 +1,27 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import React, { useState } from "react";
+import type { Variants, Transition } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-function FlipCard({ item, index }) {
-  const [isFlipped, setIsFlipped] = useState(false);
+interface Bundle {
+  title: string;
+  subtitle: string;
+  price: string;
+  features: string[];
+  benefits: string[];
+}
 
-  const cardVariant = {
+interface FlipCardProps {
+  item: Bundle;
+  index: number;
+}
+
+const FlipCard: React.FC<FlipCardProps> = ({ item, index }) => {
+  const [isFlipped, setIsFlipped] = useState<boolean>(false);
+
+  const cardVariant: Variants = {
     hidden: { opacity: 0, y: 60 },
-    visible: (i) => ({
+    visible: (i: number) => ({
       opacity: 1,
       y: 0,
       transition: {
@@ -15,7 +29,7 @@ function FlipCard({ item, index }) {
         duration: 0.6,
         type: "spring",
         stiffness: 100,
-      },
+      } as Transition,
     }),
   };
 
@@ -42,7 +56,7 @@ function FlipCard({ item, index }) {
         <div className="absolute w-full h-full bg-[rgb(25,26,26)] text-white p-6 rounded-xl border border-gray-800 shadow-lg flex flex-col justify-between backface-hidden">
           <div>
             <h3 className="text-2xl font-semibold mb-2">{item.title}</h3>
-            <p className=" mb-4 opacity-80">{item.subtitle}</p>
+            <p className="mb-4 opacity-80">{item.subtitle}</p>
             <ul className="text-sm space-y-1 text-gray-300">
               {item.features.map((f, i) => (
                 <li key={i}>• {f}</li>
@@ -69,10 +83,10 @@ function FlipCard({ item, index }) {
       </motion.div>
     </motion.div>
   );
-}
+};
 
-const BrandBundles = () => {
-  const bundles = [
+const BrandBundles: React.FC = () => {
+  const bundles: Bundle[] = [
     {
       title: "Ignite",
       subtitle: "Your Professional 1-Page Launchpad",
@@ -181,11 +195,10 @@ const BrandBundles = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          {" "}
           Transform Ideas into Impact with Our Power Packs
         </motion.h1>
       </section>
-      <div className="gap-10 sm:flex justify-items-center w-[90%] mx-auto">
+      <div className="gap-10 sm:flex justify-items-center w-[90%] mx-auto flex-wrap">
         {bundles.map((item, i) => (
           <FlipCard key={i} item={item} index={i} />
         ))}

@@ -1,9 +1,24 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, MessageSquare } from "lucide-react";
-import HeroDiv from "./HeroDiv";
+import { ChevronDown } from "lucide-react";
+// Removed HeroDiv import because it wasn’t used
 
-const imageFAQData = [
+import type { FC, KeyboardEvent } from "react";
+
+interface FAQItem {
+  id: string;
+  title: string;
+  answer: string;
+}
+
+interface AccordionItemProps {
+  item: FAQItem;
+  openId: string | null;
+  setOpenId: React.Dispatch<React.SetStateAction<string | null>>;
+  index: number;
+}
+
+const imageFAQData: FAQItem[] = [
   {
     id: "Q1",
     title: "Do you offer revisions?",
@@ -66,9 +81,16 @@ const imageFAQData = [
   },
 ];
 
-const AccordionItem = ({ item, openId, setOpenId, index }) => {
+const AccordionItem: FC<AccordionItemProps> = ({ item, openId, setOpenId, index }) => {
   const isOpen = item.id === openId;
+
   const toggleAccordion = () => setOpenId(isOpen ? null : item.id);
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      toggleAccordion();
+    }
+  };
 
   return (
     <motion.div
@@ -81,9 +103,7 @@ const AccordionItem = ({ item, openId, setOpenId, index }) => {
         id={`title-${item.id}`}
         className="flex justify-between items-center py-5 cursor-pointer select-none border-b border-gray-800 hover:border-gray-700 transition duration-300"
         onClick={toggleAccordion}
-        onKeyDown={(e) =>
-          (e.key === "Enter" || e.key === " ") && toggleAccordion()
-        }
+        onKeyDown={handleKeyDown}
         role="button"
         tabIndex={0}
         aria-controls={`content-${item.id}`}
@@ -131,19 +151,19 @@ const AccordionItem = ({ item, openId, setOpenId, index }) => {
   );
 };
 
-const FAQSection = () => {
-  const [openId, setOpenId] = useState(null);
+const FAQSection: FC = () => {
+  const [openId, setOpenId] = useState<string | null>(null);
   const half = Math.ceil(imageFAQData.length / 2);
   const col1Data = imageFAQData.slice(0, half);
   const col2Data = imageFAQData.slice(half);
 
   return (
-    <motion.div className=" w-[90%] bg-[rgb(25,26,26)] mx-auto rounded-4xl" >
+    <motion.div className="w-[90%] bg-[rgb(25,26,26)] mx-auto rounded-4xl">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full mx-auto px-6 sm:px-16 lg:px-20 py-16 "
+        className="w-full mx-auto px-6 sm:px-16 lg:px-20 py-16"
       >
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -168,9 +188,7 @@ const FAQSection = () => {
           animate="show"
           variants={{
             hidden: {},
-            show: {
-              transition: { staggerChildren: 0.05 },
-            },
+            show: { transition: { staggerChildren: 0.05 } },
           }}
           className="grid grid-cols-1 md:grid-cols-2 gap-x-12"
         >
