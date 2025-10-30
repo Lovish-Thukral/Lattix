@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef} from "react";
+import { useState, useRef } from "react";
 import React from "react";
 
 interface FormData {
@@ -28,7 +28,11 @@ const ContactUs: React.FC = () => {
   const [selectedInterest, setSelectedInterest] = useState<string>("");
   const [selectedCombo, setSelectedCombo] = useState<string>("");
   const [selectedBudget, setSelectedBudget] = useState<string>("");
-  const [freeButtonPosition, setFreeButtonPosition] = useState<Position>({ x: 0, y: 0 });
+  const [referral, setReferal] = useState<string>("");
+  const [freeButtonPosition, setFreeButtonPosition] = useState<Position>({
+    x: 0,
+    y: 0,
+  });
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const freeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -45,7 +49,7 @@ const ContactUs: React.FC = () => {
   ];
 
   const combos: string[] = ["Ignite", "Thrive", "Elevate", "Scale", "Dominate"];
-
+  const referralCodes: string[] = ["SSP05"];
   // "Free" option remains non-selectable and will run away on hover
   const budgetOptions: string[] = ["Free", "< ₹10k", "₹10k - ₹25k", "₹30k >"];
 
@@ -58,7 +62,9 @@ const ContactUs: React.FC = () => {
     setSelectedCombo((prev) => (prev === combo ? "" : combo));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -324,32 +330,80 @@ const ContactUs: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.6 }}
+            className="w-full grid grid-cols-1 lg:grid-cols-3 lg:gap-8"
           >
-            <label className="block text-white text-base font-medium mb-4">
-              Have you checked out our branding combos?
-            </label>
-            <div className="flex flex-wrap gap-3">
-              {combos.map((combo, index) => (
-                <motion.button
-                  key={combo}
-                  type="button"
-                  onClick={() => handleComboSelect(combo)}
-                  className={`px-6 py-3 rounded-full border text-sm sm:text-base transition-all duration-300 ${
-                    selectedCombo === combo
-                      ? "bg-white text-black border-white"
-                      : "bg-transparent text-white border-gray-600 hover:border-white"
-                  }`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.05 * index }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {combo}
-                </motion.button>
-              ))}
+            <div className="lg:col-span-2">
+              <a
+                className="block text-white text-base md:text-xl font-medium mb-4 underline underline-offset-8 decoration-dotted"
+                href="/services#deals"
+              >
+                Have you checked out our branding combos? &#8599;
+              </a>
+              <div className="flex flex-wrap gap-3 mb-6 lg:mb-0">
+                {combos.map((combo, index) => (
+                  <motion.button
+                    key={combo}
+                    type="button"
+                    onClick={() => handleComboSelect(combo)}
+                    className={`px-6 py-3 rounded-full border text-sm sm:text-base transition-all duration-300 ${
+                      selectedCombo === combo
+                        ? "bg-white text-black border-white"
+                        : "bg-transparent text-white border-gray-600 hover:border-white"
+                    }`}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.05 * index }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {combo}
+                  </motion.button>
+                ))}
+              </div>
             </div>
+
+            {selectedCombo && (
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="lg:col-span-1 lg:col-start-3 mr-24"
+              >
+                <div className="lg:justify-self-end">
+                  <label
+                    htmlFor="referral"
+                    className="text-white mb-4 text-base md:text-xl font-medium block"
+                  >
+                    Do you have a referral code?
+                  </label>
+                  <input
+                    id="referral"
+                    type="text"
+                    placeholder="Enter code"
+                    value={referral}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setReferal(e.target.value.toUpperCase())
+                    }
+                    className="uppercase bg-transparent border border-gray-600 text-white px-4 py-3 rounded-full focus:outline-none focus:border-white transition-all w-40 sm:w-52"
+                  />
+                  {referral.trim().length >= 4 &&
+                    referralCodes.includes(referral.trim()) && (
+                      <p className="mt-3 text-white">
+                        Referral verified — 5% off unlocked! 😎
+                      </p>
+                    )}
+
+                  {referral.trim().length >= 5 &&
+                    !referralCodes.includes(referral.trim()) && (
+                      <p className="mt-3 text-white">
+                        That code’s not on the list. Try again? 🧐
+                      </p>
+                    )}
+                </div>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Project Description & Submit */}

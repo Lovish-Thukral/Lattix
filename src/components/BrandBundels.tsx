@@ -176,7 +176,7 @@ const BrandBundles: React.FC = () => {
   ];
 
   return (
-    <div className="py-16 text-white">
+    <div className="py-16 text-white" id="deals">
       <section className="w-[90%] mx-auto md:px-10 px-2 my-7 text-white grid sm:grid-cols-8 gap-6 items-center">
         <motion.h3
           className="text-xl font-bold col-span-8 sm:col-span-2"
