@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /src/
-Disallow: /assets/temp/
-Sitemap: https://lattixinv.netlify.app/sitemap.xml
-
