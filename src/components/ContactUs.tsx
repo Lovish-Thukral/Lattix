@@ -123,7 +123,7 @@ const ContactUs: React.FC = () => {
       isConsult: false,
     };
 
-    const res = await fetch("/.netlify/functions/sendMail", {
+    const res = await fetch("/.netlify/functions/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(submissionData),
