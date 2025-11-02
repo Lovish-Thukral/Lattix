@@ -9,7 +9,3 @@ status = 200
 
 [functions]
   node_bundler = "esbuild"
-
-
-// [template.environment]
-//   RESEND_API_KEY = "YOUR_API_KEY"
