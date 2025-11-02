@@ -1,4 +1,15 @@
+[build]
+  publish = "dist"
+  functions = "netlify/functions"
+
 [[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+
+// [template.environment]
+//   RESEND_API_KEY = "YOUR_API_KEY"

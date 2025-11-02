@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef } from "react";
 import React from "react";
+import { LoaderPinwheel } from "lucide-react";
 
 interface FormData {
   name: string;
@@ -29,6 +30,8 @@ const ContactUs: React.FC = () => {
   const [selectedCombo, setSelectedCombo] = useState<string>("");
   const [selectedBudget, setSelectedBudget] = useState<string>("");
   const [referral, setReferal] = useState<string>("");
+  const [isloading, setloading] = useState<boolean>(false);
+  const [buttonVal, setbuttonVal]  = useState<string>("Submit")
   const [freeButtonPosition, setFreeButtonPosition] = useState<Position>({
     x: 0,
     y: 0,
@@ -103,15 +106,38 @@ const ContactUs: React.FC = () => {
     }, 1500);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({
-      ...formData,
+    setloading(true);
+
+    const submissionData = {
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
       interest: selectedInterest,
-      combo: selectedCombo,
       budget: selectedBudget,
+      combo: selectedCombo,
+      referral,
+      project: formData.project,
+      isConsult: false,
+    };
+
+    const res = await fetch("/.netlify/functions/sendMail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(submissionData),
+      
     });
-    // implement submission logic (API call etc.) here
+    const json = await res.json();
+    if (json.success === true) {
+      setloading(false)
+      setbuttonVal(`✅ Submitted`);
+    } else {
+      setloading(false)
+      setbuttonVal("Error")
+    }
+    
   };
 
   return (
@@ -440,7 +466,7 @@ const ContactUs: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Submit
+                {isloading ? <LoaderPinwheel className="mx-4 animate-spin" /> : <p> {buttonVal}</p>}
               </motion.button>
             </div>
           </motion.div>
