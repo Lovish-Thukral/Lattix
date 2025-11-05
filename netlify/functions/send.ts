@@ -8,7 +8,7 @@ export const handler = async (event: any) => {
   try {
     const data = JSON.parse(event.body);
 
-    const resend = new Resend(process.env.RESEND_API);
+    const resend = new Resend("re_RySjDycJ_CzAxWZzb9JuEVpnJqtY2t2e1");
 
     const html = data.isConsult
       ? `
