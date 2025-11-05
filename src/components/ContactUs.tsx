@@ -176,6 +176,7 @@ const ContactUs: React.FC = () => {
                 onChange={handleInputChange}
                 className="w-full bg-transparent border-b border-gray-600 text-white text-lg py-3 px-0 focus:outline-none focus:border-white transition-colors"
                 placeholder="Your name"
+                required
               />
             </div>
             <div>
@@ -189,6 +190,8 @@ const ContactUs: React.FC = () => {
                 onChange={handleInputChange}
                 className="w-full bg-transparent border-b border-gray-600 text-white text-lg py-3 px-0 focus:outline-none focus:border-white transition-colors"
                 placeholder="Your company"
+                required
+
               />
             </div>
           </motion.div>
@@ -212,6 +215,7 @@ const ContactUs: React.FC = () => {
                 onChange={handleInputChange}
                 className="w-full bg-transparent border-b border-gray-600 text-white text-lg py-3 px-0 focus:outline-none focus:border-white transition-colors"
                 placeholder="your@email.com"
+                required
               />
             </div>
             <div>
@@ -225,6 +229,7 @@ const ContactUs: React.FC = () => {
                 onChange={handleInputChange}
                 className="w-full bg-transparent border-b border-gray-600 text-white text-lg py-3 px-0 focus:outline-none focus:border-white transition-colors"
                 placeholder="+91 XXXXX XXXXX"
+                required
               />
             </div>
           </motion.div>
