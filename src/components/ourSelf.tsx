@@ -54,15 +54,16 @@ function OurSelf() {
             audience more effectively.
           </motion.p>
 
-          <motion.button
+          <motion.a
             className="mt-6 px-6 py-3 bg-white text-black font-bold rounded-full hover:bg-gray-200 hover:text-black transition-colors duration-500"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5, duration: 0.6 }}
+            href="/about"
           >
             About us
-          </motion.button>
+          </motion.a>
           
         </div>
       </div>
